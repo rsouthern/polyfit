@@ -17,10 +17,14 @@ find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 
 enable_testing()
 
+
+include_directories (include)
+
 add_executable(
   mytest
   src/main.cpp
   src/string-compare.cpp
+  src/polynomial.cpp
   
 )
 target_link_libraries(
