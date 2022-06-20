@@ -1,2 +1,6 @@
 # Ignore my cmake build directory
 build
+
+# Ignore VSCode related stuff
+.editorconfig
+.vscode
