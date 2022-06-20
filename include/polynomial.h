@@ -11,17 +11,17 @@
 class Polynomial {
 public:
 	/// Constructor
-	Polynomial(const unsigned int& =3);
+	Polynomial(const unsigned int& =3) noexcept;
 
 	/// Destructor
-	virtual ~Polynomial() {};
+	virtual ~Polynomial() noexcept;
+
+	/// Fit data from CSV filename
+	void fitData(const std::string &csv) noexcept;
 
 private:
 	/// Set the order of this polynomial
 	void setOrder(const unsigned int &_order) noexcept;
-
-	/// Order of this polynomial
-	unsigned int m_order = 0;
 
 	/// Coefficient vectors
 	Eigen::VectorXd m_coeffs;

@@ -1,3 +1,6 @@
 [submodule "eigen"]
 	path = eigen
 	url = https://gitlab.com/libeigen/eigen
+[submodule "tclap"]
+	path = tclap
+	url = https://github.com/mirror/tclap.git

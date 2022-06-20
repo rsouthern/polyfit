@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(mytest)
+project(polyfit)
 
 # GoogleTest requires at least C++11
 set(CMAKE_CXX_STANDARD 11)
@@ -18,17 +18,17 @@ find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 enable_testing()
 
 
-include_directories (include)
+include_directories(BEFORE include tclap/include)
 
 add_executable(
-  mytest
+  polyfit
   src/main.cpp
   src/string-compare.cpp
   src/polynomial.cpp
   
 )
 target_link_libraries(
-  mytest
+  polyfit 
   gtest_main
   Eigen3::Eigen
 )
