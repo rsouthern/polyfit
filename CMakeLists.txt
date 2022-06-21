@@ -14,13 +14,12 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-
+# Note I tried to use submodules for this, but it is a pain, so rather rely on individual installs of these libraries
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
-find_package (sciplot 1.0 REQUIRED NO_MODULE)
 
 enable_testing()
 
-
+# TCLAP is header only, so just needs it's path included
 include_directories(BEFORE include tclap/include)
 
 add_executable(
