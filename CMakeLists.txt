@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.14)
 project(polyfit)
+include(AddGitSubmodule.cmake)
 
-# GoogleTest requires at least C++11
-set(CMAKE_CXX_STANDARD 11)
+# GoogleTest requires at least C++17
+set(CMAKE_CXX_STANDARD 17)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -13,7 +14,9 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
+find_package (sciplot 1.0 REQUIRED NO_MODULE)
 
 enable_testing()
 
