@@ -26,7 +26,7 @@ int plotTest()
     plot.show();
 
     // Save the plot to a PDF file
-    plot.save("plot.pdf");
+    //plot.save("plot.pdf");
 }
 
 
@@ -52,20 +52,26 @@ int main(int argc, char **argv)
             ::testing::InitGoogleTest(&argc, argv);
             return RUN_ALL_TESTS();
         }
-        else
-        {
-            // Create a polynomial and set it's order
-            Polynomial p(std::stoi(orderArg.getValue()));
+        
+	int order = (orderArg.getValue().empty())?
+		3:std::stoi(orderArg.getValue());
 
-            // Fit polydata from CSV File
-            p.fitData(dataArg.getValue());
+	// Create a polynomial and set it's order
+        Polynomial p(order);
 
-            // Test the polynomial by evaluating a bunch of values
-            std::cout << "Last fitting error=" << p.getLastFittingError() << ", p(1)=" << p(1) << ", p(3)=" << p(3) << "\n";
+	if (dataArg.getValue().empty()) {
+	  TCLAP::ArgException e("No data file specified","-d");
+	  throw e;
+	}
 
-	    plotTest();
-        }
-    }
+        // Fit polydata from CSV File
+        p.fitData(dataArg.getValue());
+
+        // Test the polynomial by evaluating a bunch of values
+        std::cout << "Last fitting error=" << p.getLastFittingError() << ", p(1)=" << p(1) << ", p(3)=" << p(3) << "\n";
+
+	plotTest();
+    } 
     catch (TCLAP::ArgException &e) // catch any exceptions
     {
         std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl;
