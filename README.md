@@ -14,6 +14,7 @@ Try increasing the order to improve the fit.
 * Eigen 3
 * sciplot 0.2.0 and a gnuplot executable
 * TCLAP
+
 These will be retrieved and set up correctly when you retrieve the library with:
 ```````
 git clone --recurse-submodules <repo>
