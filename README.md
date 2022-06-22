@@ -1,9 +1,11 @@
 # polyfit
 Polyfit: a command line application to fit a univariate polynomial to arbitrary data. Requires gluplot executable in your path to plot.
 
-Typical use case:        
-* ./polyfit -g (generate some data to fit)
-* ./polyfit -o 3 -p -d sin.csv (fit an order 5 polygon and plot)          
+Typical use case:  
+
+* `./polyfit -g` (generate some data to fit)
+* `./polyfit -o 3 -p -d sin.csv` (fit an order 5 polygon and plot)          
+
 Try increasing the order to improve the fit.
 
 ## Getting Started
@@ -24,6 +26,7 @@ cd build
 cmake ..
 make -j
 ```````
+Only tested on Ubuntu 20.04.
 
 ## Options
 No options!
