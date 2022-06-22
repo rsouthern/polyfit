@@ -1,5 +1,10 @@
 # polyfit
-Simple GTest example using TDD on fitting a polynomial to data.
+Polyfit: a command line application to fit a univariate polynomial to arbitrary data. Requires gluplot executable in your path to plot.
+
+Typical use case:        
+* ./polyfit -g (generate some data to fit)
+* ./polyfit -o 3 -p -d sin.csv (fit an order 5 polygon and plot)          
+Try increasing the order to improve the fit.
 
 ## Getting Started
 ### Requirements
@@ -7,12 +12,16 @@ Simple GTest example using TDD on fitting a polynomial to data.
 * Eigen 3
 * sciplot 0.2.0 and a gnuplot executable
 * TCLAP
+These will be retrieved and set up correctly when you retrieve the library with:
+```````
+git clone --recurse-submodules <repo>
+```````
 
 ### Installation
 ```````
 mkdir build
 cd build
-cmake -DCMAKE_PREFIX_PATH=<path to sciplot> ..
+cmake ..
 make -j
 ```````
 
