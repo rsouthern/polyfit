@@ -6,11 +6,12 @@
 using namespace std;
 
 /// Purloined from https://stackoverflow.com/questions/34218040/how-to-read-a-csv-file-data-into-an-array
+/// 16-06-22
 
 /**
- * @brief 
- * 
- * @tparam T 
+ * @brief
+ *
+ * @tparam T
  */
 template <class T>
 class csv_istream_iterator : public iterator<input_iterator_tag, T>
@@ -51,4 +52,3 @@ const string csv_istream_iterator<string>::operator*() const
 {
     return _value;
 }
-

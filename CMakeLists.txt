@@ -13,24 +13,24 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-# Note I tried to use submodules for this, but it is a pain, so rather rely on individual installs of these libraries
-find_package (Eigen3 3.3 REQUIRED NO_MODULE)
-find_package (sciplot 0.2.0 REQUIRED NO_MODULE)
-
 enable_testing()
 
-# TCLAP is header only, so just needs it's path included
-include_directories(BEFORE include tclap/include ${sciplot_DIR}/..)
+# All dependent libraries are header only. Installation assumes you've
+# used git clone --recurse-submodules when you checked this project out.
+# The include path below will find them in the installed location.
+# This should probably have an environment variable check for each
+# in case the user wants to specify a custom path.
+include_directories(BEFORE include tclap/include eigen sciplot)
 
 add_executable(
   polyfit
   src/main.cpp
   src/string-compare.cpp
   src/polynomial.cpp
-  
+  src/utils.cpp
 )
+
 target_link_libraries(
   polyfit 
   gtest_main
-  Eigen3::Eigen
 )

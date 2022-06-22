@@ -18,10 +18,18 @@ public:
 	virtual ~Polynomial() noexcept;
 
 	/// Fit data from CSV filename
-	const double &fitData(const std::string &csv) noexcept;
+	const double &fitData(const std::vector<double> &_x,
+						  const std::vector<double> &_y) noexcept;
 
 	/// Define an operator to evaluate the polynomial given a value for x
-	double operator()(const double &) const noexcept;
+	double operator()(const double &) noexcept;
+
+	/// Duplicate of the operator above to account to allow functor to be bound
+	double eval(const double &_x) noexcept
+	{
+		// Use existing function
+		return (*this)(_x);
+	}
 
 	const double &getLastFittingError() const noexcept { return m_lastFittingError; }
 
