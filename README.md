@@ -1,6 +1,6 @@
 # polyfit
 <p align="center">
-    <img src="images/sin_plot.png" width=100%;" title="A plot">
+    <img src="images/sin_plot.png" width=40%;" title="A plot">
 </p>
 Polyfit: a command line application to fit a univariate polynomial to arbitrary data. Requires gluplot executable in your path to plot.
 
