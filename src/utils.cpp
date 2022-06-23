@@ -1,5 +1,4 @@
 #include <utils.h>
-#include <csvparse.h>
 #include <sciplot/sciplot.hpp>
 #include <functional>
 #include <rapidcsv.h>
