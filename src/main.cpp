@@ -1,4 +1,3 @@
-#include <gtest/gtest.h>
 #include <polynomial.h>
 #include <tclap/CmdLine.h>
 
@@ -38,8 +37,8 @@ int main(int argc, char **argv)
         // Run the suite of tests and exit
         if (testSwitch.getValue())
         {
-            ::testing::InitGoogleTest(&argc, argv);
-            return RUN_ALL_TESTS();
+            //::testing::InitGoogleTest(&argc, argv);
+            //return RUN_ALL_TESTS();
         }
 
         // If the user wants to generate data, generate a sin function and dump to CSV

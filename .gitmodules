@@ -1,9 +1,15 @@
-[submodule "tclap"]
-	path = tclap
-	url = https://github.com/mirror/tclap.git
-[submodule "eigen"]
-	path = eigen
+[submodule "dependencies/acutest"]
+	path = dependencies/acutest
+	url = https://github.com/mity/acutest.git
+[submodule "dependencies/eigen"]
+	path = dependencies/eigen
 	url = https://github.com/libigl/eigen.git
-[submodule "sciplot"]
-	path = sciplot
+[submodule "dependencies/sciplot"]
+	path = dependencies/sciplot
 	url = https://github.com/sciplot/sciplot.git
+[submodule "dependencies/tclap"]
+	path = dependencies/tclap
+	url = https://github.com/mirror/tclap.git
+[submodule "dependencies/rapidcsv"]
+	path = dependencies/rapidcsv
+	url = https://github.com/d99kris/rapidcsv.git

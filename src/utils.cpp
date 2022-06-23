@@ -2,6 +2,7 @@
 #include <csvparse.h>
 #include <sciplot/sciplot.hpp>
 #include <functional>
+#include <rapidcsv.h>
 
 /**
  * @brief Read from a CSV file using the CSVparse library (extern). However this fails if the external file ends on a comma, so be wary!
@@ -9,29 +10,16 @@
  * @param filename CSV file
  * @param _x output x values
  * @param _y output y values
+ * @return bool true if it worked.
  */
-int Utils::readSamplesFromCSV(std::vector<double> &_x,
-                              std::vector<double> &_y,
-                              const std::string &filename) noexcept
+bool Utils::readSamplesFromCSV(std::vector<double> &_x,
+                               std::vector<double> &_y,
+                               const std::string &filename) noexcept
 {
-    // test for doubles
-    std::ifstream fin(filename);
-    if (fin)
-    {
-        auto cit = csv_istream_iterator<double>(fin);
-        for (bool isx = true; fin; ++cit, isx = !isx)
-        {
-            // Note we can't initialise Eigen from vectors of unknown length
-            // (might be better to parse and create std::vectors externally?)
-            (isx) ? _x.push_back(*cit) : _y.push_back(*cit);
-        }
-        fin.close();
-    }
-    else
-    {
-        return EXIT_FAILURE;
-    }
-    return EXIT_SUCCESS;
+    rapidcsv::Document doc(filename, rapidcsv::LabelParams(-1, -1));
+    _x = doc.GetColumn<double>(0);
+    _y = doc.GetColumn<double>(1);
+    return true;
 }
 
 /**
@@ -43,19 +31,19 @@ int Utils::readSamplesFromCSV(std::vector<double> &_x,
  * @param x_min Minimum x-value to sample (default 0)
  * @param x_max Maximum x-value to sample (default 1)
  * @param num_samples Number of samples to generate
- * @return int
+ * @return bool true if it worked
  */
-int Utils::generateTestData(std::vector<double> &x_vec,
-                            std::vector<double> &y_vec,
-                            std::function<double(const double &)> func,
-                            const double &x_min,
-                            const double &x_max,
-                            const unsigned int &num_samples) noexcept
+bool Utils::generateTestData(std::vector<double> &x_vec,
+                             std::vector<double> &y_vec,
+                             std::function<double(const double &)> func,
+                             const double &x_min,
+                             const double &x_max,
+                             const unsigned int &num_samples) noexcept
 {
     if (num_samples <= 1)
     {
         std::cerr << "Utils::generateTestData() - num_samples must be 2 or greater!\n";
-        return EXIT_FAILURE;
+        return false;
     }
 
     // Calculate the x increment, which is num_samples+1 to account for if num_samples is 0
@@ -71,7 +59,7 @@ int Utils::generateTestData(std::vector<double> &x_vec,
         x_vec[i] = x;
         y_vec[i] = func(x);
     }
-    return EXIT_SUCCESS;
+    return true;
 }
 
 /**
@@ -80,15 +68,15 @@ int Utils::generateTestData(std::vector<double> &x_vec,
  * @param x_vec Input x vector
  * @param y_vec Input y vector (note, same size as x)
  * @param filename Filename to write to
- * @return int Returns EXIT_SUCCESS if it worked
+ * @return bool true if it worked
  */
-int Utils::writeDataToCSV(const std::vector<double> &x_vec,
-                          const std::vector<double> &y_vec,
-                          const std::string &filename) noexcept
+bool Utils::writeDataToCSV(const std::vector<double> &x_vec,
+                           const std::vector<double> &y_vec,
+                           const std::string &filename) noexcept
 {
     // Clunky error checking - could use exceptions
     if (x_vec.size() != y_vec.size())
-        return EXIT_FAILURE;
+        return false;
 
     std::ofstream myfile;
     myfile.open(filename, std::ios::out);
@@ -96,21 +84,19 @@ int Utils::writeDataToCSV(const std::vector<double> &x_vec,
     {
         auto xit = x_vec.begin();
         auto yit = y_vec.begin();
-        for (; xit != std::prev(x_vec.end()); ++xit, ++yit)
+        for (; xit != x_vec.end(); ++xit, ++yit)
         {
-            myfile << *xit << "," << *yit << ",\n";
+            myfile << *xit << "," << *yit << "\n";
         }
-        // The last row doesn't get a comma, so loop to std::prev
-        myfile << *xit << "," << *yit << "\n";
 
         // Close up the input file
         myfile.close();
     }
     else
     {
-        return EXIT_FAILURE;
+        return false;
     }
-    return EXIT_SUCCESS;
+    return true;
 }
 
 /**
@@ -120,12 +106,12 @@ int Utils::writeDataToCSV(const std::vector<double> &x_vec,
  * @param y_vec First curve y
  * @param x_vec2 Second curve x
  * @param y_vec2 Second curve y
- * @return int Returns EXIT_SUCCESS if it worked
+ * @return bool true if it works.
  */
-int Utils::plotComparison(const std::vector<double> &x_vec,
-                          const std::vector<double> &y_vec,
-                          const std::vector<double> &x_vec2,
-                          const std::vector<double> &y_vec2) noexcept
+bool Utils::plotComparison(const std::vector<double> &x_orig,
+                           const std::vector<double> &y_orig,
+                           const std::vector<double> &x_fit,
+                           const std::vector<double> &y_fit) noexcept
 {
     // Create a Plot object
     sciplot::Plot plot;
@@ -134,15 +120,15 @@ int Utils::plotComparison(const std::vector<double> &x_vec,
     plot.palette("set2");
 
     // Draw a sine graph putting x on the x-axis and sin(x) on the y-axis
-    plot.drawCurve(x_vec, y_vec).label("Original").lineWidth(2);
+    plot.drawCurve(x_orig, y_orig).label("Original").lineWidth(2);
 
     // Draw a cosine graph putting x on the x-axis and cos(x) on the y-axis
-    plot.drawCurve(x_vec2, y_vec2).label("Reconstruction").lineWidth(2);
+    plot.drawCurve(x_fit, y_fit).label("Reconstruction").lineWidth(2);
 
     // Show the plot in a pop-up window
     plot.show();
 
     // Save the plot to a PDF file
     // plot.save("plot.pdf");
-    return EXIT_SUCCESS;
+    return true;
 }
