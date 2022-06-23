@@ -1,5 +1,13 @@
 #include <polynomial.h>
 #include <Eigen/Dense>
+#include <functional>
+#include <iostream>
+#include <iterator>
+#include <numeric>
+#include <vector>
+
+// Figure out GCC version (from https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html)
+#define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 
 /**
  * @brief Construct a new Polynomial:: Polynomial object
@@ -104,6 +112,16 @@ const double &Polynomial::fitData(const std::vector<double> &_x,
  */
 double Polynomial::operator()(const double &_x) noexcept
 {
+#if GCC_VERSION > 10000
+   // Initialise a vector with values of _x in it
+   std::vector<double> x_vec(m_coeffs.size(), _x);
+
+   // Calculate exclusive_scan to determine polynomial values (e.g. 1, x, x*x, etc)
+   std::exclusive_scan(x_vec.begin(), x_vec.end(), x_vec.begin(), 1.0, std::multiplies<>{});
+
+   // Compute the produce of this vector with the coefficients
+   return std::inner_product(x_vec.begin(), x_vec.end(), m_coeffs.data(), 0.0);
+#else  // Can't detect a valid compiler - evaluate the value old skool
    double ret_val = 0.0;
    double val = 1.0;
    for (int col = 0; col < m_coeffs.size(); ++col)
@@ -114,6 +132,6 @@ double Polynomial::operator()(const double &_x) noexcept
       // Increase the dosage!
       val *= _x;
    }
-
    return ret_val;
+#endif // GCC_VERSION
 }
